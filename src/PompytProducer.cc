@@ -18,26 +18,10 @@ Implementation:
 
 #include "GeneratorInterface/PompytInterface/interface/PompytProducer.h"
 
+
 //used for defaults
 static const unsigned long kNanoSecPerSec = 1000000000;
 static const unsigned long kAveEventPerSec = 200;
-
-namespace {
- CLHEP::HepRandomEngine& getEngineReference(edm::StreamID stream)
-  {
-   
-   Service<RandomNumberGenerator> rng;
-   if(!rng.isAvailable()) {
-    throw cms::Exception("Configuration")
-       << "The RandomNumberProducer module requires the RandomNumberGeneratorService\n"
-          "which appears to be absent.  Please add that service to your configuration\n"
-          "or remove the modules that require it.";
-   }
-
-// The Service has already instantiated an engine.  Make contact with it.
-   return (rng->getEngine(stream));
-  }
-}
 
 PompytProducer::PompytProducer(const edm::ParameterSet& iConfig):
   evt(0),
@@ -57,17 +41,8 @@ PompytProducer::PompytProducer(const edm::ParameterSet& iConfig):
   eventNumber_(0)
 {
 
-  //register your products
-  /* Examples
-     produces<ExampleData2>();
-
-  //if do put with a label
-  produces<ExampleData2>("label");
-
-  //if you want to put into the Run
-  produces<ExampleData2,InRun>();
-  */
-  //now do what ever other initialization is needed
+  produces<HepMCProduct>("unsmeared");
+  produces<GenEventInfoProduct>();
 
   // PYLIST Verbosity Level
   // Valid PYLIST arguments are: 1, 2, 3, 5, 7, 11, 12, 13
@@ -154,23 +129,7 @@ PompytProducer::~PompytProducer()
 PompytProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
-  /* This is an event example
-  //Read 'ExampleData' from the Event
-  Handle<ExampleData> pIn;
-  iEvent.getByLabel("example",pIn);
-
-  //Use the ExampleData to create an ExampleData2 which 
-  // is put into the Event
-  iEvent.put(std::make_unique<ExampleData2>(*pIn));
-  */
-
-  /* this is an EventSetup example
-  //Read SetupData from the SetupRecord in the EventSetup
-  ESHandle<SetupData> pSetup;
-  iSetup.get<SetupRecord>().get(pSetup);
-  */
-
-  //  call_pyevnt();      // generate one event with Pythia
+  //call_pyevnt();      // generate one event with Pythia
   call_pompyt();
 
   // convert to stdhep format
@@ -201,6 +160,14 @@ PompytProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
   }
 
+  // save output
+  std::unique_ptr<HepMCProduct> bare_product(new HepMCProduct()) ;
+  if(evt)  bare_product->addHepMCData(evt );
+  iEvent.put(std::move(bare_product), "unsmeared");
+
+  std::unique_ptr<GenEventInfoProduct> genEventInfo(new GenEventInfoProduct(evt));
+  iEvent.put(std::move(genEventInfo));
+
   return;
 
 
@@ -226,10 +193,11 @@ PompytProducer::endStream() {
    */
 
 // ------------ method called when ending the processing of a run  ------------
+
 /*
-   void
-   PompytProducer::endRun(edm::Run const&, edm::EventSetup const&)
+   void PompytProducer::endRun(edm::Run const&, edm::EventSetup const&)
    {
+
    }
    */
 

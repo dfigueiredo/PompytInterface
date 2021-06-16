@@ -158,9 +158,6 @@ C
        common/pomcut1/ pomcut(20)
        double precision MX,MY,pp(5),pb1(5),pb2(5)
 
-
-       write(6,*) 'DIEGO TEST **************************************'
-
  1111  continue
        if(ipom(19).eq.1) then
         call pomflux(xp,t)

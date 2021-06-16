@@ -3,6 +3,7 @@
 <use   name="FWCore/ParameterSet"/>
 <use   name="FWCore/Framework"/>
 <use   name="GeneratorInterface/Pythia6Interface"/>
+<use   name="GeneratorInterface/Herwig7Interface"/>
 <use   name="SimDataFormats/GeneratorProducts"/>
 <use   name="GeneratorInterface/Core"/>
 <use   name="clhep"/>

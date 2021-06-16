@@ -17,9 +17,12 @@ Implementation:
 //
 
 // system include files
-#include <memory>
-#include <iostream>
 #include "time.h"
+#include <iostream>
+#include <memory>
+#include <thread>
+#include <chrono>
+#include <mutex>
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -47,6 +50,16 @@ Implementation:
 #include "CLHEP/Random/RandFlat.h"
 #include "GeneratorInterface/PompytInterface/interface/Pompyt.h"
 #include "GeneratorInterface/PompytInterface/interface/PYR.h"
+
+#include "GeneratorInterface/Herwig7Interface/interface/Proxy.h"
+#include "GeneratorInterface/Herwig7Interface/interface/RandomEngineGlue.h"
+
+#include "GeneratorInterface/Herwig7Interface/interface/RandomEngineGlue.h"
+#include "GeneratorInterface/Herwig7Interface/interface/HerwigUIProvider.h"
+
+#include <ThePEG/Repository/EventGenerator.h>
+#include <ThePEG/EventRecord/Event.h>
+#include <ThePEG/Vectors/HepMCTraits.h>
 
 using namespace edm;
 using namespace std;
@@ -114,8 +127,6 @@ class PompytProducer : public edm::stream::EDProducer<> {
     int                     eventNumber_;
 
     HepMC::IO_HEPEVT conv2;
-    //CLHEP::HepRandomEngine& fRandomEngine;
-    CLHEP::RandFlat*        fRandomGenerator;
 
 };
 
