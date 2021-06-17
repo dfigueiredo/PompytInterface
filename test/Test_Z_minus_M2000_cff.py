@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: GeneratorInterface/PompytInterface/python/sasha_pompytz_cff.py --python_filename TestSasha.py --eventcontent RAWSIM --customise Configuration/DataProcessing/Utils.addMonitoring --datatier GEN --fileout file:RunIISummer20UL17GEN.root --conditions 106X_mc2017_realistic_v6 --beamspot Realistic25ns13TeVEarly2017Collision --step GEN --geometry DB:Extended --era Run2_2017 --no_exec --mc -n 100
+# with command line options: GeneratorInterface/PompytInterface/python/pompyt_minus_Z_M2000_cff.py --python_filename Test_Z_minus_M2000_cff.py --eventcontent RAWSIM --customise Configuration/DataProcessing/Utils.addMonitoring --datatier GEN --fileout file:RunIISummer20UL17GEN.root --conditions 106X_mc2017_realistic_v6 --beamspot Realistic25ns13TeVEarly2017Collision --step GEN --geometry DB:Extended --era Run2_2017 --no_exec --mc -n 1000
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Eras.Era_Run2_2017_cff import Run2_2017
@@ -24,7 +24,7 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100)
+    input = cms.untracked.int32(1000)
 )
 
 # Input source
@@ -36,7 +36,7 @@ process.options = cms.untracked.PSet(
 
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
-    annotation = cms.untracked.string('GeneratorInterface/PompytInterface/python/sasha_pompytz_cff.py nevts:100'),
+    annotation = cms.untracked.string('GeneratorInterface/PompytInterface/python/pompyt_minus_Z_M2000_cff.py nevts:1000'),
     name = cms.untracked.string('Applications'),
     version = cms.untracked.string('$Revision: 1.19 $')
 )
@@ -88,7 +88,7 @@ process.generator = cms.EDProducer("PompytProducer",
             'MDME(185,1)=0     !Z decay into nu_mu nu_mubar', 
             'MDME(186,1)=0     !Z decay into tau- tau+', 
             'MDME(187,1)=0     !Z decay into nu_tau nu_taubar', 
-            'CKIN(1)=20'
+            'CKIN(1)=20.'
         ),
         pythiaUESettings = cms.vstring(
             'MSTJ(11)=3     ! Choice of the fragmentation function', 
@@ -98,8 +98,8 @@ process.generator = cms.EDProducer("PompytProducer",
             'MSTP(33)=0     ! no K factors in hard cross sections', 
             'MSTP(51)=10042 ! structure function chosen (external PDF CTEQ6L1)', 
             'MSTP(52)=2     ! work with LHAPDF', 
-            'MSTP(81)=0     ! multiple parton interactions 1 is Pythia default', 
-            'MSTP(82)=0     ! Defines the multi-parton model', 
+            'MSTP(81)=1     ! multiple parton interactions 1 is Pythia default', 
+            'MSTP(82)=4     ! Defines the multi-parton model', 
             'MSTU(21)=1     ! Check on possible errors during program execution', 
             'PARP(82)=1.8387   ! pt cutoff for multiparton interactions', 
             'PARP(89)=1960. ! sqrts for which PARP82 is set', 
@@ -123,7 +123,7 @@ process.generator = cms.EDProducer("PompytProducer",
     pdiss_GLU = cms.untracked.double(0.5),
     pdiss_MMAX = cms.untracked.double(2000.0),
     pomPdiss = cms.untracked.int32(1),
-    pomZ = cms.untracked.double(1.0),
+    pomZ = cms.untracked.double(-1.0),
     pythiaHepMCVerbosity = cms.untracked.bool(False),
     pythiaPylistVerbosity = cms.untracked.int32(1),
     xiMax = cms.untracked.double(0.2)

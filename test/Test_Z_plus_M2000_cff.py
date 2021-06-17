@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: GeneratorInterface/PompytInterface/python/pompyt_cff.py --python_filename TestPompyt_cfg.py --eventcontent RAWSIM --customise Configuration/DataProcessing/Utils.addMonitoring --datatier GEN --fileout file:RunIISummer20UL17GEN.root --conditions 106X_mc2017_realistic_v6 --beamspot Realistic25ns13TeVEarly2017Collision --step GEN --geometry DB:Extended --era Run2_2017 --no_exec --mc -n 100
+# with command line options: GeneratorInterface/PompytInterface/python/pompyt_plus_Z_M2000_cff.py --python_filename Test_Z_plus_M2000_cff.py --eventcontent RAWSIM --customise Configuration/DataProcessing/Utils.addMonitoring --datatier GEN --fileout file:RunIISummer20UL17GEN.root --conditions 106X_mc2017_realistic_v6 --beamspot Realistic25ns13TeVEarly2017Collision --step GEN --geometry DB:Extended --era Run2_2017 --no_exec --mc -n 1000
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Eras.Era_Run2_2017_cff import Run2_2017
@@ -24,7 +24,7 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100)
+    input = cms.untracked.int32(1000)
 )
 
 # Input source
@@ -36,7 +36,7 @@ process.options = cms.untracked.PSet(
 
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
-    annotation = cms.untracked.string('GeneratorInterface/PompytInterface/python/pompyt_cff.py nevts:100'),
+    annotation = cms.untracked.string('GeneratorInterface/PompytInterface/python/pompyt_plus_Z_M2000_cff.py nevts:1000'),
     name = cms.untracked.string('Applications'),
     version = cms.untracked.string('$Revision: 1.19 $')
 )
@@ -73,9 +73,22 @@ process.generator = cms.EDProducer("PompytProducer",
             'pytParameters'
         ),
         pytParameters = cms.vstring(
-            'MSEL=1', 
-            'CKIN(3)=30.', 
-            'CKIN(4)=-1'
+            'MSEL=0', 
+            'MSUB(1)=1         !Incl Z0/gamma* production', 
+            'MSTP(43)=3', 
+            'MDME(174,1)=0     !Z decay into d dbar', 
+            'MDME(175,1)=0     !Z decay into u ubar', 
+            'MDME(176,1)=0     !Z decay into s sbar', 
+            'MDME(177,1)=0     !Z decay into c cbar', 
+            'MDME(178,1)=0     !Z decay into b bbar', 
+            'MDME(179,1)=0     !Z decay into t tbar', 
+            'MDME(182,1)=1     !Z decay into e- e+', 
+            'MDME(183,1)=0     !Z decay into nu_e nu_ebar', 
+            'MDME(184,1)=1     !Z decay into mu- mu+', 
+            'MDME(185,1)=0     !Z decay into nu_mu nu_mubar', 
+            'MDME(186,1)=0     !Z decay into tau- tau+', 
+            'MDME(187,1)=0     !Z decay into nu_tau nu_taubar', 
+            'CKIN(1)=20.'
         ),
         pythiaUESettings = cms.vstring(
             'MSTJ(11)=3     ! Choice of the fragmentation function', 
@@ -85,8 +98,8 @@ process.generator = cms.EDProducer("PompytProducer",
             'MSTP(33)=0     ! no K factors in hard cross sections', 
             'MSTP(51)=10042 ! structure function chosen (external PDF CTEQ6L1)', 
             'MSTP(52)=2     ! work with LHAPDF', 
-            'MSTP(81)=0     ! multiple parton interactions 1 is Pythia default', 
-            'MSTP(82)=0     ! Defines the multi-parton model', 
+            'MSTP(81)=1     ! multiple parton interactions 1 is Pythia default', 
+            'MSTP(82)=4     ! Defines the multi-parton model', 
             'MSTU(21)=1     ! Check on possible errors during program execution', 
             'PARP(82)=1.8387   ! pt cutoff for multiparton interactions', 
             'PARP(89)=1960. ! sqrts for which PARP82 is set', 
@@ -107,10 +120,10 @@ process.generator = cms.EDProducer("PompytProducer",
     maxEventsToPrint = cms.untracked.int32(1),
     pdiss_AP = cms.untracked.double(0.016),
     pdiss_B0 = cms.untracked.double(1.5),
-    pdiss_GLU = cms.untracked.double(0.7),
-    pdiss_MMAX = cms.untracked.double(1000.0),
-    pomPdiss = cms.untracked.int32(2),
-    pomZ = cms.untracked.double(-1.0),
+    pdiss_GLU = cms.untracked.double(0.5),
+    pdiss_MMAX = cms.untracked.double(2000.0),
+    pomPdiss = cms.untracked.int32(1),
+    pomZ = cms.untracked.double(1.0),
     pythiaHepMCVerbosity = cms.untracked.bool(False),
     pythiaPylistVerbosity = cms.untracked.int32(1),
     xiMax = cms.untracked.double(0.2)
